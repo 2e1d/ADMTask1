@@ -15,15 +15,16 @@ using MyList;
 
 
 int [] array = {1};
-MyList <int> myList = new MyList <int> (4);
-for (int i = 0; i < array.Length; i++)
-    myList.Add(array[i]);
-Console.WriteLine(myList[0]);
-myList.AddFirst(1);
-myList.AddFirst(70);
-myList.AddFirst(71);
-myList.AddFirst(71);
-myList.AddFirst(71);
-myList.RemoveFromLast(1);
-Console.WriteLine(myList[0]);
+var myList = new MyList <int> ();
+myList.Add(1);
+myList.Add(2);
+myList.Add(3);
+myList.Add(4);
+myList.Add(5);
+myList.Add(6);
+myList.Add(7);
+myList.Add(8);
+myList.Add(9);
+myList.Add(10);
+myList.ToString();
 

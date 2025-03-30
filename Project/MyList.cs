@@ -49,23 +49,20 @@ public class MyList <T> : IMyList<T>{
         var newItem = item;
         AddToStart(item);
     }
-//TODO: Sadly, Doesn't work :(
     public void Remove(T item)
     {
         _actualsize--;
         var tempArray = _items;
         int index = Array.IndexOf(_items, item);
-        _items = new T[Capacity - 1];
-        for (int i = 0; i < tempArray.Length - 1; i++)
+        _items = new T[Capacity];
+        for (int i = 0; i < index; i++)
         {
-            if (i == index && index <= _actualsize)
-            {
-                _items[i] = tempArray[index + 1];
-                continue;
-            }
             _items[i] = tempArray[i];
         }
-
+        for (int i = index; i < tempArray.Length - 1; i++)
+        {
+            _items[i] = tempArray[i + 1];
+        }
     }
 
     public void Update(int index, T item)

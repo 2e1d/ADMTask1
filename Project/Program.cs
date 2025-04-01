@@ -22,8 +22,15 @@ myList.Add(1);
 myList.Add(2);
 myList.Add(3);
 myList.Add(4);
-myList.Remove(3);
-//myList.Add(6);
+myList.Add(5);
+
+var myList2 = new MyList <int> ();
+myList2.Add(1);
+myList2.Add(2);
+myList2.Add(3);
+myList2.Add(4);
+myList2.Add(5);
+// myList.Add(6);
 //myList.Remove(3);
-myList.ToString();
+Console.WriteLine(myList.Equals(myList2));
 

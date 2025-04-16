@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using System.Text;
+using System.Transactions;
 using MyList;
 using Node;
 
@@ -7,71 +7,123 @@ namespace MyLinkedList;
 
 public class MyLinkedList<T> : IMyLinkedList<T>
 {
-    private Node<T>[] _items;
-    private const int DefaultCapacity = 4;
-    private int _actualsize;
-    public int Capacity;
+    private Node<T> main; //главный элемент
+    private Node<T> tail; //последующий элемент
+    private int count;
 
 
     public MyLinkedList()
     {
-        Capacity = DefaultCapacity;
-        _items = new Node<T> [DefaultCapacity];
+
     }
+
 
     public void Add(T item)
     {
-        if (_actualsize >= _items.Length)
+        var newNode = new Node<T>(item);
+        if (count == 0)
         {
-            IncreaseListCapacity();
+            main = newNode;
+            tail = newNode;
         }
-        _items[_actualsize] = new Node<T> (item);
-        if (_actualsize > 0)
-        {
-            _items[_actualsize - 1].next = _items[_actualsize];
-        }
-        _actualsize++; 
-    }
-
-    public void IncreaseListCapacity()
-    {
-        Capacity = Capacity * 2;
-        var tempArray = _items;
-        _items = new Node<T>[Capacity];
-        for (int i = 0; i < tempArray.Length; i++)
-        {
-            _items[i] = tempArray[i];
-        }
+        tail.next = newNode;
+        tail = newNode;
+        count++; 
     }
 
     public void AddToStart(T item)
     {
-        throw new NotImplementedException();
+        if (count == 0)
+        {
+            Add(item);
+        }
+        var newNode = new Node<T>(item);
+        newNode.next = main;
+        main = newNode;
+        count++;
     }
 
     public void Remove(int index)
     {
-        throw new NotImplementedException();
+        if (index > count - 1 || index < 0)
+        {
+            throw new IndexOutOfRangeException();
+        }
+
+        //Не работает, почему то не меняется лист когда удаляешь
+        var current = main;
+        current.next = Get(index);
+        count--;
+        // for (int i = index; i < count; i++)
+        // {
+        //     current = Get(i);
+        //     current = current.next;
+        // }
     }
 
     public void Update(int index, Node<T> item)
     {
-        if (index > _items.Length - 1 || index < 0)
+        if (index > count - 1 || index < 0)
         {
             throw new IndexOutOfRangeException();
         }
 
-        _items[index] = item;
+        var current = main;
+        for (int i = 0; i < count; i++)
+        {
+            if (i == index)
+            {
+                current.Data = item.Data;
+
+                return;
+            }
+            current = current.next;
+        }
     }
 
     public Node<T> Get(int index)
     {
-        if (index > _items.Length - 1 || index < 0)
+        if (index > count - 1 || index < 0)
         {
             throw new IndexOutOfRangeException();
         }
 
-        return _items[index];
+        var current = main;
+        for (int i = 0; i < count; i++)
+        {
+            if (i == index)
+            {
+
+                return current;
+            }
+            current = current.next;
+        }
+        throw new NullReferenceException();
+    }
+
+
+    public bool Equals(MyList<T>? other)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override int GetHashCode()
+    {
+        
+        return HashCode.Combine(count);
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        var current = main;
+        for (int i = 0; i < count; i++)
+        {
+            sb.Append($"{current.Data} ");
+            current = current.next;
+        }
+
+        return sb.ToString();
     }
 
     public Node<T> this[int index]
@@ -85,28 +137,6 @@ public class MyLinkedList<T> : IMyLinkedList<T>
         {
             Update(index, value);
         }
-    }
-
-    public bool Equals(MyList<T>? other)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override int GetHashCode()
-    {
-        
-        return HashCode.Combine(_actualsize, Capacity);
-    }
-
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        for (int i = 0; i < _items.Length; i++)
-        {
-            sb.Append($"{_items[i]} ");
-        }
-
-        return sb.ToString();
     }
 }
 

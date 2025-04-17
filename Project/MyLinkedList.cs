@@ -25,6 +25,9 @@ public class MyLinkedList<T> : IMyLinkedList<T>
         {
             main = newNode;
             tail = newNode;
+            count++;
+
+            return;
         }
         tail.next = newNode;
         tail = newNode;
@@ -36,6 +39,8 @@ public class MyLinkedList<T> : IMyLinkedList<T>
         if (count == 0)
         {
             Add(item);
+
+            return;
         }
         var newNode = new Node<T>(item);
         newNode.next = main;
@@ -50,15 +55,17 @@ public class MyLinkedList<T> : IMyLinkedList<T>
             throw new IndexOutOfRangeException();
         }
 
-        //Не работает, почему то не меняется лист когда удаляешь
-        var current = main;
-        current.next = Get(index);
+        if (index == 0)
+        {
+            main = main.next;
+            count--;
+
+            return;
+        }
+        var itemToRemoveParent = Get(index - 1);
+        var itemToRemoveChildren = itemToRemoveParent.next.next;
+        itemToRemoveParent.next = itemToRemoveChildren;
         count--;
-        // for (int i = index; i < count; i++)
-        // {
-        //     current = Get(i);
-        //     current = current.next;
-        // }
     }
 
     public void Update(int index, Node<T> item)

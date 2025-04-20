@@ -1,5 +1,4 @@
 using System.Text;
-using MyList;
 using Node;
 
 namespace MyDoubleLinkedList;
@@ -59,25 +58,23 @@ public class MyDoubleLinkedList<T> : IMyDoubleLinkedList<T>
         if (index == 0)
         {
             main = main.next;
-            main.previous = default;
+            main.previous = null;
             count--;
 
             return;
         }
-        var itemToRemoveParent = Get(index - 1);
+        var itemToRemove = Get(index)
+        var itemToRemoveParent = itemToRemove.previous;
         var itemToRemoveChildren = itemToRemoveParent.next.next;
         itemToRemoveParent.next = itemToRemoveChildren;
         if (itemToRemoveChildren != null)
         {
             itemToRemoveChildren.previous = itemToRemoveParent;
-            count--;
-
-            return;
         }
         count--;
     }
 
-    public void Update(int index, Node<T> item)
+    public void Update(int index, T item)
     {
         if (index > count - 1 || index < 0)
         {
@@ -89,7 +86,7 @@ public class MyDoubleLinkedList<T> : IMyDoubleLinkedList<T>
         {
             if (i == index)
             {
-                current.Data = item.Data;
+                current.Data = item;
 
                 return;
             }
@@ -118,7 +115,7 @@ public class MyDoubleLinkedList<T> : IMyDoubleLinkedList<T>
     }
 
 
-    public bool Equals(MyList<T>? other)
+    public bool Equals(MyDoubleLinkedList<T>? other)
     {
         throw new NotImplementedException();
     }
@@ -151,7 +148,7 @@ public class MyDoubleLinkedList<T> : IMyDoubleLinkedList<T>
         }
         set
         {
-            Update(index, value);
+            Update(index, value.Data);
         }
     }
 }
@@ -164,7 +161,7 @@ interface IMyDoubleLinkedList<T>
 
     public void Remove(int index);
 
-    public void Update(int index, Node<T> item);
+    public void Update(int index, T item);
 
     public Node<T> Get(int index);
 }

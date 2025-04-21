@@ -63,9 +63,9 @@ public class MyDoubleLinkedList<T> : IMyDoubleLinkedList<T>
 
             return;
         }
-        var itemToRemove = Get(index)
+        var itemToRemove = Get(index);
         var itemToRemoveParent = itemToRemove.previous;
-        var itemToRemoveChildren = itemToRemoveParent.next.next;
+        var itemToRemoveChildren = itemToRemoveParent.next;
         itemToRemoveParent.next = itemToRemoveChildren;
         if (itemToRemoveChildren != null)
         {
@@ -74,7 +74,7 @@ public class MyDoubleLinkedList<T> : IMyDoubleLinkedList<T>
         count--;
     }
 
-    public void Update(int index, T item)
+    public void Update(int index, T data)
     {
         if (index > count - 1 || index < 0)
         {
@@ -86,7 +86,7 @@ public class MyDoubleLinkedList<T> : IMyDoubleLinkedList<T>
         {
             if (i == index)
             {
-                current.Data = item;
+                current.Data = data;
 
                 return;
             }
@@ -161,7 +161,7 @@ interface IMyDoubleLinkedList<T>
 
     public void Remove(int index);
 
-    public void Update(int index, T item);
+    public void Update(int index, T data);
 
     public Node<T> Get(int index);
 }

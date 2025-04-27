@@ -6,7 +6,7 @@ public class MyList <T> : IMyList<T>{
 
     private T[] _items = [];
     private const int DefaultCapacity = 4;
-    private int _actualsize;
+    int _actualsize;
     public int Capacity {get;set;}
 
 
@@ -15,7 +15,6 @@ public class MyList <T> : IMyList<T>{
         Capacity = DefaultCapacity;
         _items = new T[Capacity];
     }
-
 
     public void Add(T item)
     {
@@ -46,26 +45,25 @@ public class MyList <T> : IMyList<T>{
     }
     public void Remove(int index)
     {
-        if (index > _items.Length || index < 0)
+        _actualsize--;
+        if (index > _items.Length)
         {
             throw new IndexOutOfRangeException();
         }
-        if (_actualsize == _items.Length)
+        if (index == _actualsize)
         {
             _items[index] = default;
-            
             return;
         }
-        for (int i = index; i < _actualsize; i++)
+        for (int i = index; i <= _actualsize; i++)
         {
             _items[i] = _items[i + 1];
         }
-        _actualsize--;
     }
 
     public void Update(int index, T item)
     {
-        if (index > _items.Length - 1 || index < 0)
+        if (index > _items.Length - 1)
         {
             throw new IndexOutOfRangeException();
         }
@@ -75,7 +73,7 @@ public class MyList <T> : IMyList<T>{
 
     public T Get(int index)
     {
-        if (index > _items.Length - 1 || index < 0)
+        if (index > _items.Length - 1)
         {
             throw new IndexOutOfRangeException();
         }
@@ -98,7 +96,6 @@ public class MyList <T> : IMyList<T>{
     {
         get
         { 
-            
             return Get(index);
         }
         set
@@ -120,32 +117,27 @@ public class MyList <T> : IMyList<T>{
 
     public override bool Equals(object? obj)
     {
-        
         return Equals(obj);
     }
 
     public bool Equals (MyList<T> list)
     {
-        if (list == null || _actualsize != list._actualsize)
+        if (list == null && _actualsize == list._actualsize)
         {
-            
             return false;
         }
         for (int i = 0; i < _items.Length; i++)
         {
             if (!Equals(_items[i], list[i]))
             {
-                
                 return false;
             } 
         }
-        
         return true;
     }
 
     public override int GetHashCode()
     {
-        
         return HashCode.Combine(_actualsize, Capacity);
     }
 }
@@ -161,4 +153,6 @@ interface IMyList <T> : IEquatable<MyList<T>>
     public void Update(int index, T item);
 
     public T Get(int index);
+
+
 }

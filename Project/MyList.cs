@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MyList;
@@ -6,7 +7,7 @@ public class MyList <T> : IMyList<T>{
 
     private T[] _items = [];
     private const int DefaultCapacity = 4;
-    int _actualsize;
+    private int _actualsize;
     public int Capacity {get;set;}
 
 
@@ -45,7 +46,6 @@ public class MyList <T> : IMyList<T>{
     }
     public void Remove(int index)
     {
-        _actualsize--;
         if (index > _items.Length)
         {
             throw new IndexOutOfRangeException();
@@ -53,12 +53,53 @@ public class MyList <T> : IMyList<T>{
         if (index == _actualsize)
         {
             _items[index] = default;
+
             return;
         }
-        for (int i = index; i <= _actualsize; i++)
+        for (int i = index; i < _actualsize; i++)
         {
             _items[i] = _items[i + 1];
+        }        
+        _actualsize--;
+    }
+
+    public void Remove (Predicate<T> predicate)
+    {
+        int index = -1;
+        for (int i = 0; i < _actualsize; i++)
+        {
+            if (predicate(_items[i]))
+            {
+                index = i;
+
+                break;
+            }
         }
+
+        if (index < 0)
+        {
+            throw new NullReferenceException();
+        }
+
+        if (index == _actualsize)
+        {
+            _items[index] = default;
+
+            return;
+        }
+
+        for (int i = index; i <= _actualsize; i++)
+        {
+            if (i == _actualsize - 1)
+            {
+                _items[i] = default;
+
+                return;
+            }
+
+            _items[i] = _items[i + 1];
+        }
+        _actualsize--;
     }
 
     public void Update(int index, T item)
@@ -66,6 +107,27 @@ public class MyList <T> : IMyList<T>{
         if (index > _items.Length - 1)
         {
             throw new IndexOutOfRangeException();
+        }
+
+        _items[index] = item;
+    }
+
+    public void Update (T item, Predicate<T> predicate)
+    {
+        int index = -1;
+        for (int i = 0; i < _actualsize; i++)
+        {
+            if (predicate(_items[i]))
+            {
+                index = i;
+
+                break;
+            }
+        }
+
+        if (index < 0)
+        {
+            throw new NullReferenceException();
         }
 
         _items[index] = item;
@@ -150,7 +212,11 @@ interface IMyList <T> : IEquatable<MyList<T>>
 
     public void Remove(int index);
 
+    public void Remove (Predicate<T> predicate);
+
     public void Update(int index, T item);
+
+    public void Update (T item, Predicate<T> predicate);
 
     public T Get(int index);
 
